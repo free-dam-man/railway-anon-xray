@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """小火箭订阅打包：每方案一个 txt（每行一条连接串）
-→ 每方案一个 Base64 订阅文件 + 一个 sub:// 二维码 PNG。
+→ 每方案一个 Base64 订阅文件 + 一个二维码 PNG。
+
+二维码内容默认为订阅 URL 本身（--qr-mode url）：Shadowrocket 当前版本
+扫 sub:// 形式会报 "Invalid config URL"；--qr-mode sub 可回退旧格式。
 
 用法示例：
   python3 sub_pack.py --in links/ --out dist/ --url-base https://example.com/subs
@@ -38,18 +41,22 @@ def build_sub_payload(uris):
     return base64.b64encode("\n".join(uris).encode("utf-8")).decode("utf-8")
 
 
-def build_sub_qr_text(sub_url, remark):
-    """订阅 URL → 小火箭扫码识别的 sub:// 文本。"""
-    b64 = base64.urlsafe_b64encode(sub_url.encode("utf-8")).decode("utf-8").rstrip("=")
-    return f"sub://{b64}#{remark}"
+def build_sub_qr_text(sub_url, remark, mode="url"):
+    """二维码内容：url=订阅 URL 本身（现行小火箭要求）；sub=旧 sub:// 形式。"""
+    if mode == "sub":
+        b64 = base64.urlsafe_b64encode(sub_url.encode("utf-8")).decode("utf-8").rstrip("=")
+        return f"sub://{b64}#{remark}"
+    return sub_url
 
 
 def main():
-    ap = argparse.ArgumentParser(description="小火箭订阅打包：txt → Base64订阅 + sub://二维码")
+    ap = argparse.ArgumentParser(description="小火箭订阅打包：txt → Base64订阅 + 订阅URL二维码")
     ap.add_argument("--in", dest="indir", required=True, help="输入目录，每方案一个 <方案名>.txt")
     ap.add_argument("--out", dest="outdir", required=True, help="输出目录")
     ap.add_argument("--url-base", default="https://SUB_HOST",
                     help="订阅文件托管基地址（占位符 https://SUB_HOST，运行时传入真实地址）")
+    ap.add_argument("--qr-mode", choices=["url", "sub"], default="url",
+                    help="二维码内容：url=纯订阅URL（默认，现行小火箭要求）；sub=旧 sub:// 形式")
     args = ap.parse_args()
 
     qrcode = ensure_qrcode()
@@ -72,7 +79,7 @@ def main():
             f.write(b64 + "\n")
 
         sub_url = f"{args.url_base.rstrip('/')}/{name}-sub.txt"
-        qr_text = build_sub_qr_text(sub_url, name)
+        qr_text = build_sub_qr_text(sub_url, name, args.qr_mode)
         qr = qrcode.QRCode(box_size=10, border=2)
         qr.add_data(qr_text)
         qr.make(fit=True)
