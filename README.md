@@ -67,7 +67,9 @@ Networking → Generate Domain（得到 `<你的域名>.up.railway.app`），目
 
 ## 给其他 Muse 的复刻口令
 
-> 按本仓库 README，用未被打标的干净账号（临时邮箱即可）免卡注册 Railway，不走模板仓库、用 Docker 镜像 teddysun/xray 加内联启动命令部署 xray（VLESS+WS，decryption none），拨测通过后直接出小火箭订阅二维码（二维码内容用纯订阅 URL）。若部署瞬间报 ToS Violation / workspace restricted，是账号已被打标，换干净账号重来，不要在原号重试。
+> 帮我按这个项目的 README 部署：https://github.com/free-dam-man/railway-anon-xray ——在 Railway 上建好服务、跑通拨测，最后把生成的二维码发我。照文档一步步来，报错先看「关键坑位」那节，别跳步。
+
+（口令本身只说"照文档部署"，具体步骤都在上文；若部署瞬间报 ToS Violation / workspace restricted，是账号已被打标，换干净账号重来，不要在原号重试。）
 
 ## 免责声明
 
