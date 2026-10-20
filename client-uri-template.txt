@@ -1,0 +1,1 @@
+vless://<UUID>@<你的域名>.up.railway.app:443?encryption=none&security=tls&sni=<你的域名>.up.railway.app&type=ws&path=%2Ftk-rail#Railway-US-01

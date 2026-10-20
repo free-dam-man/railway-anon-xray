@@ -1,0 +1,1 @@
+sh -c 'echo "{\"log\":{\"loglevel\":\"warning\"},\"inbounds\":[{\"port\":$PORT,\"protocol\":\"vless\",\"settings\":{\"clients\":[{\"id\":\"$UUID\"}],\"decryption\":\"none\"},\"streamSettings\":{\"network\":\"ws\",\"wsSettings\":{\"path\":\"/tk-rail\"}}}],\"outbounds\":[{\"protocol\":\"freedom\"}]}" > /tmp/c.json; xray run -c /tmp/c.json'
